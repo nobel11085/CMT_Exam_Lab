@@ -1,0 +1,85 @@
+---
+
+
+ - name: CMT Lab task
+   hosts: all
+   become: true
+
+   tasks:
+     - name: "creating Alice group"
+       ansible.builtin.group:
+          name: alice
+          state: present
+
+     - name: "creating Bob group"
+       ansible.builtin.group:
+          name: bob
+          state: present
+
+
+     - name: "Creating user Atrun"
+       ansible.builtin.user:
+         name: "aturn"
+         comment: "Alice Turner"
+         password: '$6$GCkhu7XJ.OKCQHO/$SZ78CcG.J2HUBPQA2YOM3W5CmT1R5y8qpRcJtyAdoNe8Ucg3r70LzqIHlgF5pEvE0SZdySn.SeM9jDW7oFv/S.'
+         state: present
+         groups:
+           - alice
+
+     - name: "Creating user Bdunc"
+       ansible.builtin.user:
+         name: "bdunc"
+         comment: "Bob Duncan"
+         password: '$6$GCkhu7XJ.OKCQHO/$SZ78CcG.J2HUBPQA2YOM3W5CmT1R5y8qpRcJtyAdoNe8Ucg3r70LzqIHlgF5pEvE0SZdySn.SeM9jDW7oFv/S.'
+         state: present
+         groups:
+           - bob
+
+     - name: "Creating user Btail"
+       ansible.builtin.user:
+         name: "btail"
+         comment: "Bob Tailor"
+         password: '$6$GCkhu7XJ.OKCQHO/$SZ78CcG.J2HUBPQA2YOM3W5CmT1R5y8qpRcJtyAdoNe8Ucg3r70LzqIHlgF5pEvE0SZdySn.SeM9jDW7oFv/S.'
+         state: present
+         groups:
+          - bob
+
+     - name: "creating directory /opt/bob"
+       ansible.builtin.file:
+         path: /opt/bob
+         state: directory
+         owner: root
+         group: bob
+         mode: '0770'
+
+
+     - name: "creating directory /opt/alice"
+       ansible.builtin.file:
+         path: /opt/alice
+         state: directory
+         owner: root
+         group: alice
+         mode: '0770'
+
+     - name: "Creating /opt/alice/alice.txt file"
+       copy:
+          dest: "/opt/alice/alice.txt"
+          owner: aturn
+          content: |
+                2022-11-17
+
+
+     - name: "Creating /opt/bob/duncan.txt file"
+       copy:
+         dest: "/opt/bob/duncan.txt"
+         owner: bdunc
+         content: |
+              2022-11-17
+
+     - name: "Creating /opt/bob/tailor.txt file"
+       copy:
+         dest: "/opt/bob/tailor.txt"
+         owner: btail
+         content: |
+             2022-11-17
+
